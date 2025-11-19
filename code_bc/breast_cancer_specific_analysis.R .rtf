@@ -1,0 +1,150 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2867
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww30040\viewh18980\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 ##############################################\
+# Breast Cancer\'96Specific Survival Analysis\
+# Outcome: Breast-cancer\'96specific mortality\
+# Author: Kamalakanta (Duke University)\
+##############################################\
+\
+library(dplyr)\
+library(survival)\
+library(survminer)\
+library(broom)\
+library(tidyverse)\
+\
+##############################################\
+# 1. LOAD DATA\
+##############################################\
+\
+breast_final <- read.csv("new survival.csv")\
+\
+##############################################\
+# 2. PREPARE ANALYSIS VARIABLES\
+##############################################\
+\
+breast_final <- breast_final %>%\
+  mutate(\
+    # Race variable already cleaned\
+    race_clean = factor(race_clean, levels = c("White", "Black")),\
+\
+    # Age groups\
+    age_group = case_when(\
+      grepl("15-19|20-24|25-29|30-34|35-39|40-44",\
+            Age.recode.with..1.year.olds.and.90.) ~ "Under 45",\
+      grepl("45-49|50-54|55-59",\
+            Age.recode.with..1.year.olds.and.90.) ~ "45-59",\
+      grepl("60-64|65-69|70-74",\
+            Age.recode.with..1.year.olds.and.90.) ~ "60-74",\
+      TRUE ~ "75+"\
+    ),\
+\
+    age_group = factor(age_group,\
+                       levels = c("Under 45", "45-59", "60-74", "75+")),\
+\
+    # Year of diagnosis groups\
+    year_group = case_when(\
+      Year.of.diagnosis < 1990 ~ "1975-1989",\
+      Year.of.diagnosis < 2000 ~ "1990-1999",\
+      Year.of.diagnosis < 2010 ~ "2000-2009",\
+      TRUE ~ "2010-2023"\
+    ),\
+    year_group = factor(year_group,\
+                        levels = c("1990-1999", "2000-2009", "2010-2023"))\
+  )\
+\
+##############################################\
+# 3. SUBSET TO BLACK & WHITE + NON-MISSING BC EVENT\
+##############################################\
+\
+breast_bw_bc <- breast_final %>%\
+  filter(race_clean %in% c("White", "Black")) %>%\
+  filter(!is.na(event_bc))\
+\
+##############################################\
+# 4. COX MODELS \'97 BREAST-CANCER\'96SPECIFIC MORTALITY\
+##############################################\
+\
+# Model 1: Race only\
+cox_bc_model1_race <- coxph(\
+  Surv(surv_years, event_bc) ~ race_clean,\
+  data = breast_bw_bc\
+)\
+\
+# Model 2: Age-adjusted\
+cox_bc_model2_race <- coxph(\
+  Surv(surv_years, event_bc) ~ race_clean + age_group,\
+  data = breast_bw_bc\
+)\
+\
+# Model 3: Fully adjusted\
+cox_bc_model3_full <- coxph(\
+  Surv(surv_years, event_bc) ~ race_clean + income_category +\
+    age_group + year_group,\
+  data = breast_bw_bc\
+)\
+\
+##############################################\
+# 5. SAVE COX RESULTS\
+##############################################\
+\
+dir.create("results_bc", showWarnings = FALSE)\
+\
+bc_compare <- bind_rows(\
+  tidy(cox_bc_model1_race, exponentiate = TRUE, conf.int = TRUE) %>%\
+    mutate(Model = "Model 1: Race only"),\
+  tidy(cox_bc_model2_race, exponentiate = TRUE, conf.int = TRUE) %>%\
+    mutate(Model = "Model 2: Race + Age"),\
+  tidy(cox_bc_model3_full, exponentiate = TRUE, conf.int = TRUE) %>%\
+    mutate(Model = "Model 3: Fully Adjusted")\
+) %>%\
+  mutate(\
+    HR = round(estimate, 3),\
+    CI_95 = paste0("(", round(conf.low, 3), "-", round(conf.high, 3), ")"),\
+    P_value = ifelse(p.value < 0.001, "<0.001", round(p.value, 3))\
+  ) %>%\
+  select(Model, term, HR, CI_95, P_value)\
+\
+write.csv(bc_compare,\
+          "results_bc/cox_bc_models_comparison.csv",\
+          row.names = FALSE)\
+\
+##############################################\
+# 6. ADJUSTED SURVIVAL CURVES (RACE)\
+##############################################\
+\
+dir.create("figures_bc", showWarnings = FALSE)\
+\
+# Typical patient profile\
+newdata_race <- data.frame(\
+  race_clean = factor(c("White", "Black"),\
+                      levels = levels(breast_bw_bc$race_clean)),\
+  income_category = factor("Medium Income ($60K-$90K)",\
+                           levels = levels(breast_bw_bc$income_category)),\
+  age_group = factor("60-74",\
+                     levels = levels(breast_bw_bc$age_group)),\
+  year_group = factor("2010-2023",\
+                      levels = levels(breast_bw_bc$year_group))\
+)\
+\
+fit_adj_race <- survfit(cox_bc_model3_full, newdata = newdata_race)\
+\
+adj_bc_race_plot <- ggsurvplot(\
+  fit_adj_race, data = newdata_race, conf.int = TRUE,\
+  legend.title = "Race", legend.labs = c("White", "Black"),\
+  title = "Adjusted Breast Cancer\'96Specific Survival by Race",\
+  xlab = "Time since diagnosis (years)",\
+  ylab = "Breast cancer\'96specific survival probability",\
+  ggtheme = theme_minimal()\
+)\
+\
+ggsave("figures_bc/adjusted_bc_survival_by_race.png",\
+       plot = adj_bc_race_plot$plot,\
+       width = 10, height = 7, dpi = 300)\
+\
+cat("\\nBreast-cancer\'96specific analysis complete.\\n")\
+}
