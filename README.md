@@ -385,10 +385,10 @@ Surveillance Research Program, released April 2025, based on the November
 ##  Author
 
 **Kamalakanta Gahan**  
-MS Population Health Sciences  
-Duke University  
-Research Assistant, REGAL Lab (Research to Eliminate Global Cancer Disparities)  
-PI: Prof. Tomi Akinyemiju
+Department of Population Health Sciences  
+Duke University School of Medicine 
+
+
 
 **Contact:** [kamalakanta.gahan@duke.edu]
 
@@ -403,8 +403,7 @@ PI: Prof. Tomi Akinyemiju
 ---
 
 ## 📄 License
-
-MIT License (or specify your preferred license)
+CC-By Attribution 4.0 International
 
 ---
 
