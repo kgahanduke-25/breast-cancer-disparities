@@ -1,6 +1,6 @@
 # Breast Cancer Survival Disparities: Race and Neighborhood Income Analysis
 
-(https://github.com/KamalakantaGahan/breast-cancer-disparities)
+https://github.com/kgahanduke-25/breast-cancer-disparities/edit/main/README.md
 
 **Author:** Kamalakanta Gahan  
 **Institution:** Duke University, MS Population Health Sciences    
