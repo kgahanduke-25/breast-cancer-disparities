@@ -1,5 +1,6 @@
 # Breast Cancer Survival Disparities: Race and Neighborhood Income Analysis
 Documentation
+**DOI:** [10.17605/OSF.IO/KYV45](https://doi.org/10.17605/OSF.IO/KYV45)
 https://github.com/kgahanduke-25/breast-cancer-disparities/edit/main/README.md
 
 For detailed statistical methods, model specifications, and equations, see 
@@ -365,10 +366,9 @@ source("code_bc/bc_specific_analysis.R")
 ## 📚 Citation
 
 If you use this analysis or code, please cite:
-```
 Gahan, K. (2025). Breast Cancer Survival Disparities: Race and Neighborhood 
-Income Analysis Using SEER Data (1990-2023). GitHub repository: 
-https://github.com/KamalakantaGahan/breast-cancer-disparities
+Income Analysis Using SEER Data (Version 1.0) [Computer software]. 
+Open Science Framework. https://doi.org/10.17605/OSF.IO/KYV45
 ```
 
 **SEER Data Citation:**
