@@ -1,8 +1,8 @@
 # Breast Cancer Survival Disparities: Race and Neighborhood Income Analysis
-Documentation
-**DOI:** [10.17605/OSF.IO/KYV45](https://doi.org/10.17605/OSF.IO/KYV45)
-https://github.com/kgahanduke-25/breast-cancer-disparities/edit/main/README.md
 
+**DOI:** [10.17605/OSF.IO/KYV45](https://doi.org/10.17605/OSF.IO/KYV45)
+
+Documentation: https://github.com/kgahanduke-25/breast-cancer-disparities/edit/main/README.md
 For detailed statistical methods, model specifications, and equations, see 
 - Statistical Methods Complete methodological documentation
  https://github.com/kgahanduke-25/breast-cancer-disparities/blob/main/Statistical%20Methods
