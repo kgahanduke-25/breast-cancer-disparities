@@ -47,7 +47,7 @@ This project examines **racial and socioeconomic disparities in breast cancer su
 
 ---
 
-### 💡 Critical Insights
+### Critical Insights
 
 1. **Racial disparity is LARGER for breast cancer-specific mortality (78%) than all-cause mortality (54%)**
    - This proves the disparity is NOT due to comorbidities or other causes of death
@@ -70,9 +70,13 @@ This project examines **racial and socioeconomic disparities in breast cancer su
    - 25-35% higher mortality in low-income neighborhoods
    - Persists within racial groups
 
+The larger racial disparity for breast cancer-specific mortality 
+compared to all-cause mortality suggests disparities arise primarily 
+through cancer-specific pathways (screening, stage at diagnosis, 
+treatment access, tumor biology) rather than general health differences
 ---
 
-## 📊 Sample Characteristics
+##  Sample Characteristics
 
 ### Overall Sample
 - **Total patients:** 507,574 Black and White female breast cancer cases
@@ -132,7 +136,23 @@ breast-cancer-disparities/
 ---
 
 ## 🔬 Methods
+We estimated hazard ratios (HRs) for two outcomes:
 
+1. All-cause mortality: Time from diagnosis to death from any cause or 
+   censoring at last contact
+   
+2. Breast cancer-specific mortality: Time from diagnosis to death with 
+   breast cancer listed as the underlying cause of death (SEER 
+   cause-of-death recode), treating non-breast cancer deaths as 
+   competing events
+
+The Cox proportional hazards model for both outcomes was:
+
+h(t) = h₀(t) exp(β₁Race + β₂Income + β₃Age + β₄DiagnosisEra)
+
+where Race = 1 if Black, 0 if White (reference), and Income is 
+categorized as high (≥$90K, reference), medium ($60K-$90K), or 
+low (<$60K) based on county median household income.
 ### Study Design
 - **Type:** Retrospective cohort study using cancer registry data
 - **Population:** Female breast cancer patients in SEER registries
@@ -182,7 +202,7 @@ breast-cancer-disparities/
 
 ---
 
-## 📈 Key Visualizations
+##  Key Visualizations
 
 ### 1. Survival by Income Level
 ![Survival by Income](figures/breast_cancer_survival_by_income.png)
@@ -212,7 +232,7 @@ breast-cancer-disparities/
 
 ---
 
-## 🏥 Public Health Implications
+##  Public Health Implications
 
 ### What These Findings Mean
 
@@ -265,7 +285,7 @@ breast-cancer-disparities/
 
 ---
 
-## ⚠️ Study Limitations
+##  Study Limitations
 
 1. **Ecological fallacy:** County-level income is a proxy; individual socioeconomic data not available
 2. **Unmeasured confounders:**
@@ -281,10 +301,10 @@ breast-cancer-disparities/
 
 ---
 
-## 🔄 Reproducibility
+##  Reproducibility
 
 ### Data Access
-**⚠️ Important:** Raw SEER data is NOT included in this repository per SEER Data Use Agreement.
+** Important:** Raw SEER data is NOT included in this repository per SEER Data Use Agreement.
 
 To reproduce this analysis:
 1. Register at [https://seer.cancer.gov/data/access.html](https://seer.cancer.gov/data/access.html)
@@ -318,7 +338,7 @@ source("code_bc/bc_specific_analysis.R")
 
 ---
 
-## 🔮 Future Directions
+## Future Directions
 
 1. **Link to ICE measures** using restricted-access geocoded SEER data for neighborhood-level segregation indices
 2. **Incorporate clinical variables:**
@@ -355,7 +375,7 @@ Surveillance Research Program, released April 2025, based on the November
 
 ---
 
-## 👤 Author
+##  Author
 
 **Kamalakanta Gahan**  
 MS Population Health Sciences  
