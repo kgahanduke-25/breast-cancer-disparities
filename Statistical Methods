@@ -1,0 +1,180 @@
+# Statistical Methods
+
+## Overview
+
+This document provides detailed statistical methods for the breast cancer survival disparities analysis. For a high-level summary, see the main [README](../README.md).
+
+---
+
+## Study Design
+
+Retrospective cohort study using SEER cancer registry data (1990-2023).
+
+---
+
+## Statistical Analysis
+
+We used Cox proportional hazards regression to estimate hazard ratios (HRs) and 95% confidence intervals (CIs) for the association between race, neighborhood income, and breast cancer mortality. The general form of the Cox model is:
+
+*h(t) = h₀(t) exp(β₁X₁ + β₂X₂ + ... + βₚXₚ)*
+
+where *h(t)* is the hazard at time *t*, *h₀(t)* is the baseline hazard function, *β* represents the regression coefficients (log-hazard ratios), and *X* denotes covariate values.
+
+### Model Specifications
+
+We fitted four sequential models to assess confounding and effect modification:
+
+**Model 1 (Unadjusted):**
+
+*h(t) = h₀(t) exp(β₁Race + β₂Income_medium + β₃Income_low)*
+
+where Race = 1 if Black and 0 if White (reference); Income_medium = 1 if median household income $60,000-$89,999 and 0 otherwise; Income_low = 1 if income <$60,000 and 0 otherwise. The reference group was White patients residing in high-income neighborhoods (≥$90,000).
+
+**Model 2 (Age-adjusted):**
+
+*h(t) = h₀(t) exp(β₁Race + β₂Income_medium + β₃Income_low + β₄Age₄₅₋₅₉ + β₅Age₆₀₋₇₄ + β₆Age₇₅₊)*
+
+where age was categorized as <45 years (reference), 45-59 years, 60-74 years, and ≥75 years.
+
+**Model 3 (Fully adjusted - Primary model):**
+
+*h(t) = h₀(t) exp(β₁Race + β₂Income_medium + β₃Income_low + β₄Age₄₅₋₅₉ + β₅Age₆₀₋₇₄ + β₆Age₇₅₊ + β₇Year₂₀₀₀₋₂₀₀₉ + β₈Year₂₀₁₀₋₂₀₂₃)*
+
+where diagnosis era was categorized as 1990-1999 (reference), 2000-2009, and 2010-2023 to account for temporal changes in screening, treatment, and survival.
+
+**Model 4 (Interaction model):**
+
+*h(t) = h₀(t) exp(β₁Race + β₂Income_medium + β₃Income_low + β₄Age₄₅₋₅₉ + β₅Age₆₀₋₇₄ + β₆Age₇₅₊ + β₇Year₂₀₀₀₋₂₀₀₉ + β₈Year₂₀₁₀₋₂₀₂₃ + β₉(Race × Income_medium) + β₁₀(Race × Income_low))*
+
+Interaction terms were included to assess whether racial disparities varied by neighborhood income level.
+
+---
+
+## Outcomes
+
+We examined two outcomes:
+
+### 1. All-Cause Mortality
+- **Definition:** Time from diagnosis to death from any cause or censoring at last contact
+- **Event coding:** Event = 1 if died (any cause), Event = 0 if alive at last follow-up
+
+### 2. Breast Cancer-Specific Mortality
+- **Definition:** Time from diagnosis to death with breast cancer as the underlying cause
+- **Event coding:** Event = 1 if died from breast cancer (SEER cause-of-death classification), Event = 0 if alive or died from other causes (competing risk)
+- **Model form:** Identical to equations above, with hazard function *h_BC(t)* representing the cause-specific hazard
+
+---
+
+## Variable Definitions
+
+### Exposure Variables
+
+**Race/Ethnicity:**
+- Black (Non-Hispanic)
+- White (Non-Hispanic) - Reference group
+- Other races excluded from this analysis
+
+**Neighborhood Income:**
+- Based on county-level median household income (inflation-adjusted to 2023 dollars)
+- High: ≥$90,000 (Reference)
+- Medium: $60,000-$89,999
+- Low: <$60,000
+
+### Confounders
+
+**Age at Diagnosis:**
+- <45 years (Reference)
+- 45-59 years
+- 60-74 years
+- ≥75 years
+
+**Diagnosis Era:**
+- 1990-1999 (Reference)
+- 2000-2009
+- 2010-2023
+
+---
+
+## Model Diagnostics
+
+### Proportional Hazards Assumption
+- Evaluated using scaled Schoenfeld residuals
+- Log-log survival plots examined
+- Assumption held reasonably well for primary exposures (race, income)
+
+### Model Fit
+- Concordance statistics calculated
+- Likelihood ratio tests performed
+- Comparison of nested models using AIC/BIC
+
+---
+
+## Survival Analysis
+
+### Kaplan-Meier Curves
+- Generated for race, income, and race-income combinations
+- Compared using log-rank tests
+- Risk tables showing number at risk at each time point
+
+### Median Survival Times
+- Calculated for each exposure group
+- 95% confidence intervals estimated
+
+---
+
+## Software
+
+**R version:** 4.5.0 (2025-04-11)
+
+**Key packages:**
+- `survival` (version 3.5-7): Cox regression, Kaplan-Meier analysis
+- `survminer` (version 0.4.9): Survival curve visualization
+- `tidyverse` (version 2.0.0): Data manipulation
+- `broom` (version 1.0.5): Model output tidying
+
+**Analysis scripts:**
+- `code/breast_cancer_analysis.R`: Overall survival analysis
+- `code_bc/bc_specific_analysis.R`: Cause-specific mortality analysis
+
+---
+
+## Statistical Significance
+
+- Two-sided tests
+- α = 0.05
+- No multiple testing correction applied (exploratory analysis)
+
+---
+
+## Limitations
+
+### Unmeasured Confounding
+- No adjustment for stage at diagnosis
+- Tumor subtype data (ER/PR/HER2) limited to 2010+ diagnoses
+- No treatment information (surgery, chemotherapy, radiation)
+- Comorbidities not captured
+- Individual-level socioeconomic data unavailable
+
+### Measurement
+- County-level income (ecological measure)
+- Cannot calculate census tract-level ICE measures with public SEER data
+
+### Generalizability
+- SEER covers ~48% of US population
+- Analysis limited to Black and White patients only
+
+---
+
+## Reproducibility
+
+All code is available in this repository. To reproduce the analysis:
+
+1. Obtain SEER data (requires data use agreement)
+2. Run `code/breast_cancer_analysis.R`
+3. Run `code_bc/bc_specific_analysis.R` for cause-specific analysis
+
+Expected runtime: 15-30 minutes on standard laptop
+
+---
+
+**Last updated:** November 19, 2025
