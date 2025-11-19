@@ -5,10 +5,10 @@
 Documentation: https://github.com/kgahanduke-25/breast-cancer-disparities/edit/main/README.md
 For detailed statistical methods, model specifications, and equations, see 
 - Statistical Methods Complete methodological documentation
- https://github.com/kgahanduke-25/breast-cancer-disparities/blob/main/Statistical%20Methods
+[https://github.com/kgahanduke-25/breast-cancer-disparities/blob/main/Statistical%20Methods]
 
 **Author:** Kamalakanta Gahan  
-**Institution:** Duke University, MS Population Health Sciences    
+**Institution:** Department of population health sciences, Duke University school of Medicine
 **Date:** November 2025
 ```
 
