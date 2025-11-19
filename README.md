@@ -1,6 +1,10 @@
 # Breast Cancer Survival Disparities: Race and Neighborhood Income Analysis
-
+Documentation
 https://github.com/kgahanduke-25/breast-cancer-disparities/edit/main/README.md
+
+For detailed statistical methods, model specifications, and equations, see 
+- Statistical Methods Complete methodological documentation
+ https://github.com/kgahanduke-25/breast-cancer-disparities/blob/main/Statistical%20Methods
 
 **Author:** Kamalakanta Gahan  
 **Institution:** Duke University, MS Population Health Sciences    
@@ -103,6 +107,9 @@ treatment access, tumor biology) rather than general health differences
 breast-cancer-disparities/
 │
 ├── README.md                          # This file
+├── docs/
+│   └──Statistical Methods.md              ← Detailed equations & methods
+
 ├── .gitignore                         # Excludes raw data files
 │
 ├── code/                              # Overall survival analysis
