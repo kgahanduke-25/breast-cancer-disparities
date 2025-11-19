@@ -1,0 +1,7 @@
+"race_clean","income_category","N","Deaths","Mortality_Percent","Median_Survival_Years"
+"White","High Income ($90K+)",212538,84646,39.8,7.9
+"White","Medium Income ($60K-$90K)",223499,97546,43.6,8.2
+"White","Low Income (<$60K)",26706,13895,52,7.8
+"Black","High Income ($90K+)",17957,7625,42.5,5.7
+"Black","Medium Income ($60K-$90K)",24864,10510,42.3,6.2
+"Black","Low Income (<$60K)",2010,524,26.1,4.4

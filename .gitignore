@@ -1,0 +1,19 @@
+# RStudio junk (do NOT upload)
+.Rproj.user/
+*.Rproj
+.Rhistory
+.RData
+
+# Raw data (never upload SEER files)
+data/
+new survival.csv
+*.Rdata
+*.RData
+*.rds
+
+# macOS junk
+.DS_Store
+
+# Temp, cache
+*.tmp
+*.log
